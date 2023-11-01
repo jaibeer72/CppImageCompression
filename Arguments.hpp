@@ -12,10 +12,32 @@
 
 class Args {
 private:
+public:
+    const std::string &getSource() const {
+        return source;
+    }
+
+    const std::string &getDestination() const {
+        return destination;
+    }
+
+    float getBlurFactor() const {
+        return blurFactor;
+    }
+
+    bool getIsRunnableConfig() const {
+        if(source.empty()) return false;
+        if(destination.empty()) return false;
+        if(blurFactor>1.0f || blurFactor<0.0) return false;
+
+        return true;
+    }
+
+private:
     // Variables
     std::string source = "";
     std::string destination = "";
-    unsigned int blurFactor = 5; // defaulting it to something if needed.
+    float blurFactor = 0.5; // defaulting it to something if needed.
 
     // Argument map
     std::map<std::string, std::function<void(const std::string&)>> argsMap;
@@ -28,17 +50,6 @@ private:
         argsMap["-d"] = [this](const std::string& val){ setDestination(val);};
         argsMap["-b"] = [this](const std::string& val){ setBlurFactor(val);};
     }
-
-    // basiclly check all the things are set properly to run the program
-    bool IsRunnableConfig()
-    {
-        if(source.empty()) return false;
-        if(destination.empty()) return false;
-
-        return true;
-    }
-public:
-    bool isRunnableConfig = IsRunnableConfig();
 
 public:
     Args()
@@ -91,7 +102,7 @@ public:
 
     void setBlurFactor(const std::string& value)
     {
-        blurFactor = std::stoi(value);
+        blurFactor = std::stof(value);
         std::cout << "Blur Factor set to: " << blurFactor << std::endl;
     }
 };
