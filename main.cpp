@@ -3,6 +3,48 @@
 #include "ImageModules/Pixel.hpp"
 #include <fstream>
 
+void NaiveBlur(std::vector<Pixel24>& image, int width, int height, int kernelSize) {
+    std::vector<Pixel24> originalImage = image; // Create a copy of the original image
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int totalRed = 0, totalGreen = 0, totalBlue = 0;
+            int pixelCount = 0;
+
+            for (int j = -kernelSize; j <= kernelSize; j++) {
+                for (int i = -kernelSize; i <= kernelSize; i++) {
+                    int newX = x + i;
+                    int newY = y + j;
+
+                    // Apply mirror boundary conditions for out-of-bounds pixels
+                    if (newX < 0) {
+                        newX = -newX;  // Mirror the x-coordinate
+                    } else if (newX >= width) {
+                        newX = 2 * width - newX - 1;  // Mirror the x-coordinate
+                    }
+
+                    if (newY < 0) {
+                        newY = -newY;  // Mirror the y-coordinate
+                    } else if (newY >= height) {
+                        newY = 2 * height - newY - 1;  // Mirror the y-coordinate
+                    }
+
+                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                        totalRed += originalImage[newY * width + newX].r;
+                        totalGreen += originalImage[newY * width + newX].g;
+                        totalBlue += originalImage[newY * width + newX].b;
+                        pixelCount++;
+                    }
+                }
+            }
+
+            image[y * width + x].r = totalRed / pixelCount;
+            image[y * width + x].g = totalGreen / pixelCount;
+            image[y * width + x].b = totalBlue / pixelCount;
+        }
+    }
+}
+
 int main(int argc , char* argv[]) {
 
     Args* appArgs = new Args(argc,argv);
@@ -52,11 +94,15 @@ int main(int argc , char* argv[]) {
 //        return {};
 //    }
 
+    // Nieve blur with mirrieing in the edeges
+
     // Read the input image data
     std::vector<Pixel24> imageData(header.width * header.height);
     file.read(reinterpret_cast<char*>(imageData.data()), imageData.size() * sizeof(Pixel24));
 
     file.close();
+
+    NaiveBlur(imageData,header.width, header.height , 9);
 
     // Create an output TGA file with all red pixels
     std::ofstream outputFile(appArgs->getDestination().c_str(), std::ios::binary);

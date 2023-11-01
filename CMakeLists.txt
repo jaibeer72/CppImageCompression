@@ -8,4 +8,5 @@ add_executable(CppImageCompression main.cpp
         ImageModules/TgaModule.cpp
         ImageModules/TgaModule.hpp
         ImageModules/Pixel.hpp
-        ImageModules/IImageLoader.hpp)
+        ImageModules/IImageLoader.hpp
+        Utils/MathUtils.hpp)
