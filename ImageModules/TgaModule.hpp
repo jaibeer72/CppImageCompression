@@ -11,26 +11,29 @@
 
 namespace TGA
 {
-    typedef struct Header
+    struct Header
     {
-        char  idlength;
-        char  colourmaptype;
-        char  datatypecode; // if deltype 2
+        char idlength;
+        char colourmaptype;
+        char datatypecode; // if deltype 2
         short int colourmaporigin;
         short int colourmaplength;
-        char  colourmapdepth;
+        char colourmapdepth;
         short int x_origin;
         short int y_origin;
         short width;
         short height;
-        char  bitsperpixel;
-        char  imagedescriptor;
+        char bitsperpixel;
+        char imagedescriptor;
     };
+
     class ImageLoader : IImageLoader
     {
     public:
         void ReadFile(std::string source) override;
+
         void WriteFile(std::string dest) override;
+
     private:
 
     };

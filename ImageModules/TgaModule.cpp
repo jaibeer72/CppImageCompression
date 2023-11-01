@@ -4,10 +4,12 @@
 
 #include "TgaModule.hpp"
 
-void TGA::ImageLoader::ReadFile(std::string source) {
+void TGA::ImageLoader::ReadFile(std::string source)
+{
 
 }
 
-void TGA::ImageLoader::WriteFile(std::string dest) {
+void TGA::ImageLoader::WriteFile(std::string dest)
+{
 
 }

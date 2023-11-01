@@ -10,45 +10,54 @@
 #include <iostream>
 #include <functional>
 
-class Args {
+class Args
+{
 private:
 public:
-    const std::string &getSource() const {
+    const std::string &getSource() const
+    {
         return source;
     }
 
-    const std::string &getDestination() const {
+    const std::string &getDestination() const
+    {
         return destination;
     }
 
-    float getBlurFactor() const {
+    float getBlurFactor() const
+    {
         return blurFactor;
     }
 
-    bool getIsRunnableConfig() const {
-        if(source.empty()) return false;
-        if(destination.empty()) return false;
-        if(blurFactor>1.0f || blurFactor<0.0) return false;
+    bool getIsRunnableConfig() const
+    {
+        if (source.empty()) return false;
+        if (destination.empty()) return false;
+        if (blurFactor > 1.0f || blurFactor < 0.0) return false;
 
         return true;
     }
 
 private:
-    // Variables
     std::string source = "";
     std::string destination = "";
     float blurFactor = 0.5; // defaulting it to something if needed.
 
-    // Argument map
-    std::map<std::string, std::function<void(const std::string&)>> argsMap;
+    // Using map cause 1) it's small information 2) it's in order mostly might help me write the
+    // Commands help more easily.
+    // Maybe later i can use io Mannipulate to write the help easily by giving each a description.
+    std::map<std::string, std::function<void(const std::string &)>> argsMap;
 
 private:
-    // private functions
     void InitializeArgsMap()
     {
-        argsMap["-s"] = [this](const std::string& val){ setSource(val);};
-        argsMap["-d"] = [this](const std::string& val){ setDestination(val);};
-        argsMap["-b"] = [this](const std::string& val){ setBlurFactor(val);};
+        // EZ PZ lemon squuezy
+        // The only good thing about JS style patterns.
+        argsMap = {
+                {"-s", [this](const std::string &val) { setSource(val); }},
+                {"-d", [this](const std::string &val) { setDestination(val); }},
+                {"-b", [this](const std::string &val) { setBlurFactor(val); }}
+        };
     }
 
 public:
@@ -57,13 +66,13 @@ public:
         InitializeArgsMap();
     }
 
-    Args(int argc , char* argv[] )
+    Args(int argc, char *argv[])
     {
         InitializeArgsMap();
-        parseArgs(argc,argv);
-
+        parseArgs(argc, argv);
     }
-    void parseArgs(int argc , char* argv[])
+
+    void parseArgs(int argc, char *argv[])
     {
         for (int i = 1; i < argc; i += 2)
         {
@@ -75,32 +84,30 @@ public:
                 if (argsMap.find(arg) != argsMap.end())
                 {
                     argsMap[arg](value);
-                }
-                else
+                } else
                 {
                     std::cerr << "Unknown argument: " << arg << std::endl;
                 }
-            }
-            else
+            } else
             {
                 std::cerr << "Missing value for argument: " << argv[i] << std::endl;
             }
         }
     }
 
-    void setSource(const std::string& value)
+    void setSource(const std::string &value)
     {
         source = value;
         std::cout << "Source set to: " << source << std::endl;
     }
 
-    void setDestination(const std::string& value)
+    void setDestination(const std::string &value)
     {
         destination = value;
         std::cout << "Destination set to: " << destination << std::endl;
     }
 
-    void setBlurFactor(const std::string& value)
+    void setBlurFactor(const std::string &value)
     {
         blurFactor = std::stof(value);
         std::cout << "Blur Factor set to: " << blurFactor << std::endl;
