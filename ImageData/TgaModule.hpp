@@ -7,7 +7,10 @@
 #ifndef CPPIMAGECOMPRESSION_TGAMODULE_HPP
 #define CPPIMAGECOMPRESSION_TGAMODULE_HPP
 
-#include "IImageLoader.hpp"
+
+#include <memory>
+
+#include "Base/AImageData.hpp"
 
 namespace TGA
 {
@@ -26,16 +29,11 @@ namespace TGA
         char bitsperpixel;
         char imagedescriptor;
     };
-
-    class ImageLoader : IImageLoader
+    class TGAImageData: public AImageData
     {
     public:
-        void ReadFile(std::string source) override;
-
-        void WriteFile(std::string dest) override;
-
-    private:
-
+        static std::unique_ptr<TGAImageData> CreateTGAImage(const std::string &filePath);
+        static void WriteImage(const std::string &filePath, std::unique_ptr <TGAImageData> imgData);
     };
 }
 

@@ -7,16 +7,16 @@
 
 #include <iostream>
 
-// TGA pixel is stored in b g r ?
-// TODO : maybe we need to redo the structure to do something differently. so it can be used more universially
+// TGA pixel is stored in b g r
+// https://stackoverflow.com/questions/75191/what-is-an-unsigned-char
 struct Pixel24
 {
-    uint8_t b, g, r;
+    unsigned char r, g, b;
 };
 
 struct Pixel32
 {
-    uint8_t r, g, b, a;
+    unsigned char r, g, b, a;
 };
 
 

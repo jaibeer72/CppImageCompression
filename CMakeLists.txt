@@ -5,8 +5,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(CppImageCompression main.cpp
         Arguments.hpp
-        ImageModules/TgaModule.cpp
-        ImageModules/TgaModule.hpp
-        ImageModules/Pixel.hpp
-        ImageModules/IImageLoader.hpp
-        Utils/MathUtils.hpp)
+        ImageData/TgaModule.cpp
+        ImageData/TgaModule.hpp
+        ImageData/Pixel.hpp
+        Utils/MathUtils.hpp
+        ImageData/ImageData.cpp
+        ImageData/ImageData.hpp
+        ImageData/Base/IImageData.hpp
+        ImageData/Base/AImageData.hpp)
