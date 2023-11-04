@@ -7,7 +7,7 @@ add_executable(CppImageCompression main.cpp
         Arguments.hpp
         ImageData/TgaModule.cpp
         ImageData/TgaModule.hpp
-        ImageData/Pixel.hpp
+        ImageData/Base/Pixel.hpp
         Utils/MathUtils.hpp
         ImageData/ImageData.cpp
         ImageData/ImageData.hpp

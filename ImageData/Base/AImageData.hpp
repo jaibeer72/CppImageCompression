@@ -10,20 +10,17 @@
 #include "IImageData.hpp"
 #include <iostream>
 #include <memory>
-
 class AImageData : public IImageData
 {
 private:
     unsigned int width;
     unsigned int height;
     unsigned int bitsPerPixel;
-    // TODO: see if this works properly
-    void* pixelData;
+    std::vector<Pixel32> pixelData;
 public:
     ~AImageData() override
     {
-        // Free Pixel data here later
-        free(pixelData);
+
     }
 
     unsigned int GetWidth() const override
@@ -41,30 +38,32 @@ public:
         return bitsPerPixel;
     }
 
-    const void *GetPixels() const override
+    const std::vector<Pixel32> GetPixels() const override
     {
         return pixelData;
     }
 
     // Setters
-    void SetWidth(unsigned int width) const override
+    void SetWidth(unsigned int Width)  override
     {
-        width = width;
+        width = Width;
     }
 
-    void SetHeight(unsigned int height) const override
+    void SetHeight(unsigned int Height)  override
     {
-        height = height;
+        height = Height;
     }
 
-    void SetBitsPerPixel(unsigned int bitsPerPixel) const override
+    void SetBitsPerPixel(unsigned int BitsPerPixel) override
     {
-       bitsPerPixel = bitsPerPixel;
+       bitsPerPixel = BitsPerPixel;
     }
 
-    void SetPixelData(void *pixelData) const override
+    void SetPixelData(std::vector<Pixel32> Pixeldata) override
     {
-        pixelData = pixelData;
+        pixelData.clear();
+        pixelData.resize(Pixeldata.size());
+        pixelData = Pixeldata;
     }
 
 };

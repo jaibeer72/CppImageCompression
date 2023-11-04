@@ -5,12 +5,11 @@
 #ifndef CPPIMAGECOMPRESSION_IIMAGEDATA_HPP
 #define CPPIMAGECOMPRESSION_IIMAGEDATA_HPP
 
+#include "Pixel.hpp"
+
 class IImageData
 {
-protected:
-    int width;
-    int height;
-    int bitsPerPixel;
+
 public:
     // You never know virtual distructos
     virtual ~IImageData(){}
@@ -22,16 +21,17 @@ public:
 
     virtual unsigned int GetBitsPerPixel() const = 0;
 
-    virtual void SetWidth(unsigned int width) const =0;
+    virtual void SetWidth(unsigned int width)  =0;
 
-    virtual void SetHeight(unsigned int height) const =0;
+    virtual void SetHeight(unsigned int height)  =0;
 
-    virtual void SetBitsPerPixel(unsigned int bitsPerPixel) const = 0;
+    virtual void SetBitsPerPixel(unsigned int bitsPerPixel)  = 0;
 
-    virtual void SetPixelData(void *pixelData) const = 0;
+    virtual void SetPixelData(std::vector<Pixel32> pixelData)  = 0;
 
-    // Cause i want to support different pixel types i am using a void*
-    virtual const void* GetPixels() const = 0;
+    virtual
+
+    virtual const std::vector<Pixel32> GetPixels() const = 0;
 
 };
 
