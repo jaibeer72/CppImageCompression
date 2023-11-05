@@ -16,6 +16,8 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float b
 
     int kernelSize = (int)(std::max(width, height) * (blurFactor / 10)) / 4;
 
+    std::cout<<"Kernel Size : "<<kernelSize<<std::endl;
+
     if (kernelSize % 2 == 0)
     {
         kernelSize++;
