@@ -15,7 +15,7 @@ void NaiveBlur::PerformNaiveBlur(AImageData &imageData, float blurFactor)
     int height = imageData.GetHeight();
     int width = imageData.GetWidth();
 
-    int kernelSize = std::max(width , height) * (blurFactor / 10);
+    int kernelSize = (int)(std::max(width, height) * (blurFactor / 10)) / 4;
 
     if(kernelSize% 2 == 0)
     {

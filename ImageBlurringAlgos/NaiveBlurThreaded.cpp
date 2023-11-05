@@ -14,7 +14,7 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float b
     int height = imageData.GetHeight();
     int width = imageData.GetWidth();
 
-    int kernelSize = std::max(width, height) * (blurFactor / 10);
+    int kernelSize = (int)(std::max(width, height) * (blurFactor / 10)) / 4;
 
     if (kernelSize % 2 == 0)
     {
@@ -28,6 +28,8 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float b
         for (int y = startY; y < endY; y++)
         {
             std::cout << "Interations completed: " << y << " out of " << endY << " on thread " << std::this_thread::get_id() << std::endl;
+            float percentile = (float)(y / endY) * 100.0f;
+            std::cout << "Percentile completed: " << percentile << "%" << std::endl;
             for (int x = 0; x < width; x++)
             {
                 int totalRed = 0, totalGreen = 0, totalBlue = 0;
