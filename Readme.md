@@ -66,7 +66,7 @@ convolution is a way to apply a filter to an image. the idea is to take and conv
 this is on the mac/ unix 
 you can also use source 
 ```git
-./CppImageCompression <input file> <output file> <filter size> <filter type> <filter name>
+./CppImageCompression -s <source> -d <destination> -b <blurFactor> -a <algorithm>
 ```
 - Supported Argumetnts 
 - ```-s <input file> ``` : the file to read from.
