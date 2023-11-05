@@ -7,33 +7,27 @@
 #include "../Utils/MathUtils.hpp"
 #include <thread>
 
-void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData , float blurFactor)
+void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float blurFactor)
 {
     std::vector<Pixel32> originalImage = imageData.GetPixels();
     std::vector<Pixel32> image = imageData.GetPixels();
     int height = imageData.GetHeight();
     int width = imageData.GetWidth();
 
-    // we need to keep the kernal size to odd numbers between 0 - 15 as from testing that works the best
-    int kernelSize = std::max(width , height) * (blurFactor / 10);
+    int kernelSize = std::max(width, height) * (blurFactor / 10);
 
-    if(kernelSize % 2 == 0)
+    if (kernelSize % 2 == 0)
     {
         kernelSize++;
     }
 
-
-
     std::mutex mtx;
-    std::atomic_int pixelCount = 0;
 
-    auto threadFunc = [&](int startRow, int endRow)
+    auto threadFunc = [&](int startY, int endY)
     {
-        for (int y = startRow; y < endRow; y++)
+        for (int y = startY; y < endY; y++)
         {
-            std::cout << "Interations completed: " << y << " out of " << endRow << " on thread " << std::this_thread::get_id() << std::endl;
-            float percentile = (float)(y / endRow) * 100.0f;
-            std::cout << "Percentile completed: " << percentile << "%" << std::endl;
+            std::cout << "Interations completed: " << y << " out of " << endY << " on thread " << std::this_thread::get_id() << std::endl;
             for (int x = 0; x < width; x++)
             {
                 int totalRed = 0, totalGreen = 0, totalBlue = 0;
@@ -50,7 +44,8 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData , float 
                         if (newX < 0)
                         {
                             newX = -newX;  // Mirror the x-coordinate
-                        } else if (newX >= width)
+                        }
+                        else if (newX >= width)
                         {
                             newX = 2 * width - newX - 1;  // Mirror the x-coordinate
                         }
@@ -58,23 +53,24 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData , float 
                         if (newY < 0)
                         {
                             newY = -newY;  // Mirror the y-coordinate
-                        } else if (newY >= height)
+                        }
+                        else if (newY >= height)
                         {
                             newY = 2 * height - newY - 1;  // Mirror the y-coordinate
                         }
 
                         if (newX >= 0 && newX < width && newY >= 0 && newY < height)
                         {
+                            mtx.lock();
                             totalRed += originalImage[newY * width + newX].r;
                             totalGreen += originalImage[newY * width + newX].g;
                             totalBlue += originalImage[newY * width + newX].b;
+                            pixelCount++;
+                            mtx.unlock();
                         }
                     }
                 }
-                // Atomically increment the pixel count.
-                pixelCount++;
 
-                // Lock the mutex before writing to the image variable.
                 mtx.lock();
                 image[y * width + x].r = totalRed / pixelCount;
                 image[y * width + x].g = totalGreen / pixelCount;
@@ -90,10 +86,10 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData , float 
     std::vector<std::thread> threads;
     for (int i = 0; i < numThreads; i++)
     {
-        int startRow = i * rowsPerThread;
-        int endRow = (i == numThreads - 1) ? height : (startRow + rowsPerThread);
+        int startY = i * rowsPerThread;
+        int endY = (i == numThreads - 1) ? height : (startY + rowsPerThread);
 
-        threads.emplace_back(threadFunc, startRow, endRow);
+        threads.emplace_back(threadFunc, startY, endY);
     }
 
     // Wait for all threads to finish.
