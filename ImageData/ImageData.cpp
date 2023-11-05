@@ -7,6 +7,10 @@
 
 std::unique_ptr<AImageData> ImageData::Create(const std::string &filePath)
 {
-    // TODO: check file extention before extinding the fucntion.
+    // check if tga File extention else thorow error
+    // I know we are not checking at the end of the file but this is a prototype
+    if(filePath.find(".tga") == std::string::npos)
+        throw std::runtime_error("File format not supported");
+
     return TGA::TGAImageData::CreateTGAImage(filePath);
 }

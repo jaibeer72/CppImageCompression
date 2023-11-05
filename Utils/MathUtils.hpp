@@ -8,7 +8,7 @@
 namespace MathUtils
 {
     template<typename T>
-    inline static T lerp(T a, T b, T t)
+    static T lerp(T a, T b, T t)
     {
         return (1 - t) * a + t * b;
     }

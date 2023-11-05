@@ -3,21 +3,24 @@
 //
 
 #include "FastGaussianBlur.hpp"
+#include "../Utils/MathUtils.hpp"
 #include <cmath>
 
-void FastGaussianBlur::PerformFastGaussianBlur(AImageData &imageData, float sigma)
+void FastGaussianBlur::PerformFastGaussianBlur(AImageData &imageData, float blurFactor)
 {
-    std::vector<int> boxes = computeBoxes(3.0f, numberOfBoxes);
+    float sigma = MathUtils::lerp((float)sigmaMin, (float)simgaMax, blurFactor);
+
+    std::vector<int> boxes = computeBoxes(sigma, numberOfBoxes);
     std::vector<Pixel32> pixelData = imageData.GetPixels();
     std::vector<Pixel32> tempPixelData = imageData.GetPixels();
-    boxBlur(pixelData, tempPixelData, imageData.GetWidth(), imageData.GetHeight(), (boxes[0]));
-    boxBlur(tempPixelData, pixelData, imageData.GetWidth(), imageData.GetHeight(), (boxes[1]));
-    boxBlur(pixelData, tempPixelData, imageData.GetWidth(), imageData.GetHeight(), (boxes[2]));
+    boxBlur(pixelData, tempPixelData, imageData.GetWidth(), imageData.GetHeight(), (boxes[0] - 1) / 2);
+    boxBlur(tempPixelData, pixelData, imageData.GetWidth(), imageData.GetHeight(), (boxes[1] - 1) / 2);
+    boxBlur(pixelData, tempPixelData, imageData.GetWidth(), imageData.GetHeight(), (boxes[2] - 1) / 2);
     imageData.SetPixelData(tempPixelData);
 }
 
 void FastGaussianBlur::boxBlurH(std::vector<Pixel32> &scl, std::vector<Pixel32> &tcl, int w, int h, int radius) {
-    float iarr = 1.f / (radius + radius + 1);
+    double iarr = (double)1.f / (radius + radius + 1);
 
     for (int y = 0; y < h; y++) {
         int targetIndex = y * w;
@@ -70,7 +73,7 @@ void FastGaussianBlur::boxBlurH(std::vector<Pixel32> &scl, std::vector<Pixel32> 
 }
 
 void FastGaussianBlur::boxBlurT(std::vector<Pixel32> &scl, std::vector<Pixel32> &tcl, int w, int h, int radius) {
-    float iarr = 1.f / (radius + radius + 1);
+    double iarr = (double)1.f / (radius + radius + 1);
 
     for (int x = 0; x < w; x++) {
         int targetIndex = x;
@@ -129,6 +132,10 @@ void FastGaussianBlur::boxBlurT(std::vector<Pixel32> &scl, std::vector<Pixel32> 
 
 void FastGaussianBlur::boxBlur(std::vector<Pixel32> &scl, std::vector<Pixel32> &tcl, int w, int h, int radius)
 {
+    if (radius < 0 || radius > w || radius > h) {
+        throw std::invalid_argument("Invalid kernel radius");
+    }
+
     std::swap(scl, tcl);
     boxBlurH(tcl, scl, w, h, radius);
     boxBlurT(scl, tcl, w, h, radius);
@@ -143,11 +150,11 @@ std::vector<int> FastGaussianBlur::computeBoxes(float sigma, int numberOfBoxes)
     int wu = wl + 2;
 
     double mIdeal = (double)(12 * sigma * sigma - numberOfBoxes * wl * wl - 4 * numberOfBoxes * wl - 3 * numberOfBoxes) / (-4 * wl - 4);
-    int m = static_cast<int>(std::round(mIdeal));
+    int m = std::round(mIdeal);
 
     std::vector<int> sizes;
     for (int i = 0; i < numberOfBoxes; i++) {
-        sizes.push_back(((i < m ? wl : wu) - 1) / 2);
+        sizes.push_back((i < m ? wl : wu));
     }
 
     return sizes;

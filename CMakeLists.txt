@@ -14,4 +14,9 @@ add_executable(CppImageCompression main.cpp
         ImageData/Base/IImageData.hpp
         ImageData/Base/AImageData.hpp
         ImageBlurringAlgos/FastGaussianBlur.cpp
-        ImageBlurringAlgos/FastGaussianBlur.hpp)
+        ImageBlurringAlgos/FastGaussianBlur.hpp
+        ImageBlurringAlgos/Base/ImageBlurrer.cpp
+        ImageBlurringAlgos/Base/ImageBlurrer.hpp
+        ImageBlurringAlgos/Base/ESupportedImageBlurringAlgos.hpp
+        ImageBlurringAlgos/NaiveBlur.cpp
+        ImageBlurringAlgos/NaiveBlur.hpp)

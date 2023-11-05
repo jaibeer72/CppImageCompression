@@ -10,9 +10,10 @@
 #include <iostream>
 #include <functional>
 
+#include "ImageBlurringAlgos/Base/ESupportedImageBlurringAlgos.hpp"
+
 class Args
 {
-private:
 public:
     const std::string &getSource() const
     {
@@ -38,10 +39,19 @@ public:
         return true;
     }
 
+    ESupportedImageBlurringAlgos getAlgo() const
+    {
+        return algo;
+    }
+
 private:
     std::string source = "";
     std::string destination = "";
     float blurFactor = 0.5; // defaulting it to something if needed.
+    ESupportedImageBlurringAlgos algo = ESupportedImageBlurringAlgos::NAIVE_BLUR;
+
+private:
+    // defaulting to this for now
 
     // Using map cause 1) it's small information 2) it's in order mostly might help me write the
     // Commands help more easily.
@@ -49,6 +59,7 @@ private:
     std::map<std::string, std::function<void(const std::string &)>> argsMap;
 
 private:
+
     void InitializeArgsMap()
     {
         // EZ PZ lemon squuezy
@@ -56,7 +67,8 @@ private:
         argsMap = {
                 {"-s", [this](const std::string &val) { setSource(val); }},
                 {"-d", [this](const std::string &val) { setDestination(val); }},
-                {"-b", [this](const std::string &val) { setBlurFactor(val); }}
+                {"-b", [this](const std::string &val) { setBlurFactor(val); }},
+                {"-a", [this](const std::string &val) { setAlgorithm(val); }}
         };
     }
 
@@ -72,6 +84,22 @@ public:
         parseArgs(argc, argv);
     }
 
+    static void showHelp()
+    {
+        // we need to show tabulated help that will be easy to read.
+        std::cout << "Help: " << std::endl;
+        std::cout << "Usage: " << std::endl;
+        std::cout << "cppImageCompression -s <source> -d <destination> -b <blurFactor> -a <algorithm>" << std::endl;
+        std::cout << "Arguments: " << std::endl;
+        std::cout << "-s <source> : The source image path" << std::endl;
+        std::cout << "-d <destination> : The destination image path" << std::endl;
+        std::cout << "-b <blurFactor> : The blur factor between 0.0 - 1.0" << std::endl;
+        std::cout << "-a <algorithm> : The algorithm to use for blurring the image" << std::endl;
+        std::cout << "Supported Algorithms: " << std::endl;
+        std::cout << "NaiveBlur // Default" << std::endl;
+        std::cout << "FastGaussianBlur" << std::endl;
+    }
+
     void parseArgs(int argc, char *argv[])
     {
         for (int i = 1; i < argc; i += 2)
@@ -81,12 +109,20 @@ public:
                 const std::string arg = argv[i];
                 const std::string value = argv[i + 1];
 
+                if(arg.compare("--help") == 0)
+                {
+                    showHelp();
+                    break;
+                }
+
                 if (argsMap.find(arg) != argsMap.end())
                 {
                     argsMap[arg](value);
                 } else
                 {
                     std::cerr << "Unknown argument: " << arg << std::endl;
+                    showHelp();
+                    break;
                 }
             } else
             {
@@ -111,6 +147,20 @@ public:
     {
         blurFactor = std::stof(value);
         std::cout << "Blur Factor set to: " << blurFactor << std::endl;
+    }
+
+    void setAlgorithm(const std::string &str)
+    {
+        if (str == "NaiveBlur")
+        {
+            algo = ESupportedImageBlurringAlgos::NAIVE_BLUR;
+        } else if (str == "FastGaussianBlur")
+        {
+            algo = ESupportedImageBlurringAlgos::FAST_GAUSSIAN_BLUR;
+        } else
+        {
+            std::cerr << "Unknown Algorithm: " << str << std::endl;
+        }
     }
 };
 

@@ -11,10 +11,12 @@
 class FastGaussianBlur
 {
 public:
-    static void PerformFastGaussianBlur(AImageData &imageData, float sigma);
+    static void PerformFastGaussianBlur(AImageData &imageData, float blurFactor);
 
 private:
     static const int numberOfBoxes = 3;
+    static constexpr float simgaMax = 5.0f;
+    static constexpr float sigmaMin = 0.0f;
 
 private:
     static std::vector<int> computeBoxes(float sigma, int numberOfBoxes);
@@ -28,6 +30,8 @@ private:
  * Refrances: https://www.youtube.com/watch?v=C_zFhWdM4ic
  *  https://blog.ivank.net/fastest-gaussian-blur.html
  *  code being converted from JS to C++:
+ *  Currently this is not working as expected and fails to run properly
+ *  creates huge amout of artifacts.
  *
  *  function gaussBlur_4 (scl, tcl, w, h, r) {
     var bxs = boxesForGauss(r, 3);
@@ -62,6 +66,7 @@ function boxBlurT_4 (scl, tcl, w, h, r) {
         for(var j=h-r; j<h  ; j++) { val += lv      - scl[li];  tcl[ti] = Math.round(val*iarr);  li+=w; ti+=w; }
     }
 }
+
  */
 
 
