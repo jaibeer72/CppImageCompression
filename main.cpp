@@ -1,7 +1,7 @@
 #include "Arguments.hpp"
 #include "ImageData/TgaModule.hpp"
 #include "ImageData/ImageData.hpp"
-#include <fstream>
+#include "ImageBlurringAlgos/FastGaussianBlur.hpp"
 
 void NaiveBlur(std::vector<Pixel32> &image, int width, int height, int kernelSize)
 {
@@ -66,95 +66,40 @@ int main(int argc, char *argv[])
     std::cout<<"\n randome pixels color" << tgaImage->GetPixels()[0].r;
 
     auto pixelData = tgaImage->GetPixels();
-    NaiveBlur(pixelData, tgaImage->GetWidth(), tgaImage->GetHeight(), 9);
-    tgaImage->SetPixelData(pixelData);
+    //NaiveBlur(pixelData, tgaImage->GetWidth(), tgaImage->GetHeight(), 5);
+    //tgaImage->SetPixelData(pixelData);
+    FastGaussianBlur::PerformFastGaussianBlur(*tgaImage, appArgs->getBlurFactor());
+    std::vector<Pixel32> pixelData2 = tgaImage->GetPixels();
+    for(int i = 0; i < pixelData2.size(); i++)
+    {
+        if(pixelData2[i].r > 255)
+        {
+            std::cerr << "pixel red value is greater than 255";
+        } else if (pixelData2[i].g > 255)
+        {
+            std::cerr << "pixel green value is greater than 255";
+        } else if (pixelData2[i].b > 255)
+        {
+            std::cerr << "pixel blue value is greater than 255";
+        } else if (pixelData2[i].a > 255)
+        {
+            std::cerr << "pixel alpha value is greater than 255";
+        } else if(pixelData2[i].r < 0)
+        {
+            std::cerr <<"pixel red value is less than 0";
+        } else if (pixelData2[i].g < 0)
+        {
+            std::cerr << "pixel green value is less than 0";
+        } else if (pixelData2[i].b < 0)
+        {
+            std::cerr << "pixel blue value is less than 0";
+        } else if (pixelData2[i].a < 0)
+        {
+            std::cerr << "pixel alpha value is less than 0";
+        }
+        ClampPixelValues(pixelData2[i]);
+    }
     tgaImage->WritePixelDataToFile(appArgs->getDestination());
-
-
-
-//    std::ifstream file(appArgs->getSource().c_str(), std::ios::binary | std::ios_base::in);
-//    if (!file.is_open())
-//    {
-//        std::cerr << "\nFailed to open the TGA file." << std::endl;
-//        return 1;
-//    }
-//
-//    TGA::Header header;
-//    file.read(reinterpret_cast<char *>(&header.idlength), sizeof(header.idlength));
-//    file.read(reinterpret_cast<char *>(&header.colourmaptype), sizeof(header.colourmaptype));
-//    file.read(reinterpret_cast<char *>(&header.datatypecode), sizeof(header.datatypecode));
-//    file.read(reinterpret_cast<char *>(&header.colourmaporigin), sizeof(header.colourmaporigin));
-//    file.read(reinterpret_cast<char *>(&header.colourmaplength), sizeof(header.colourmaplength));
-//    file.read(reinterpret_cast<char *>(&header.colourmapdepth), sizeof(header.colourmapdepth));
-//    file.read(reinterpret_cast<char *>(&header.x_origin), sizeof(header.x_origin));
-//    file.read(reinterpret_cast<char *>(&header.y_origin), sizeof(header.y_origin));
-//    file.read(reinterpret_cast<char *>(&header.width), sizeof(header.width));
-//    file.read(reinterpret_cast<char *>(&header.height), sizeof(header.height));
-//    file.read(reinterpret_cast<char *>(&header.bitsperpixel), sizeof(header.bitsperpixel));
-//    file.read(reinterpret_cast<char *>(&header.imagedescriptor), sizeof(header.imagedescriptor));
-//
-//    if (!file)
-//    {
-//        std::cerr << "Failed to read the TGA header." << std::endl;
-//        return 1;
-//    }
-
-
-//    if (header.bitsperpixel == 24) {
-//        // Read 24-bit TGA image using Pixel24
-//        std::vector<Pixel24> imageData(header.width * header.height);
-//        file.read(reinterpret_cast<char*>(imageData.data()), imageData.size() * sizeof(Pixel24));
-//        std::cout<<imageData.size();
-//
-//        // Process the imageData as Pixel24
-//    } else if (header.bitsperpixel == 32) {
-//        // Read 32-bit TGA image using Pixel32
-//        std::vector<Pixel32> imageData(header.width * header.height);
-//        file.read(reinterpret_cast<char*>(imageData.data()), imageData.size() * sizeof(Pixel32));
-//
-//        // Process the imageData as Pixel32
-//    } else {
-//        std::cerr << "Unsupported TGA format. Only 24-bit and 32-bit TGA files are supported." << std::endl;
-//        return {};
-//    }
-
-    // Nieve blur with mirrieing in the edeges
-
-    // Read the input image data
-//    std::vector<Pixel24> imageData(header.width * header.height);
-//    file.read(reinterpret_cast<char *>(imageData.data()), imageData.size() * sizeof(Pixel24));
-//
-//    file.close();
-//
-//    NaiveBlur(imageData, header.width, header.height, 3);
-//
-//    // Create an output TGA file with all red pixels
-//    std::ofstream outputFile(appArgs->getDestination().c_str(), std::ios::binary);
-//    if (!outputFile.is_open())
-//    {
-//        std::cerr << "\nFailed to create the output TGA file." << std::endl;
-//        return 1;
-//    }
-//
-//    // Write the header to the output file
-//    outputFile.write(reinterpret_cast<char *>(&header.idlength), sizeof(header.idlength));
-//    outputFile.write(reinterpret_cast<char *>(&header.colourmaptype), sizeof(header.colourmaptype));
-//    outputFile.write(reinterpret_cast<char *>(&header.datatypecode), sizeof(header.datatypecode));
-//    outputFile.write(reinterpret_cast<char *>(&header.colourmaporigin), sizeof(header.colourmaporigin));
-//    outputFile.write(reinterpret_cast<char *>(&header.colourmaplength), sizeof(header.colourmaplength));
-//    outputFile.write(reinterpret_cast<char *>(&header.colourmapdepth), sizeof(header.colourmapdepth));
-//    outputFile.write(reinterpret_cast<char *>(&header.x_origin), sizeof(header.x_origin));
-//    outputFile.write(reinterpret_cast<char *>(&header.y_origin), sizeof(header.y_origin));
-//    outputFile.write(reinterpret_cast<char *>(&header.width), sizeof(header.width));
-//    outputFile.write(reinterpret_cast<char *>(&header.height), sizeof(header.height));
-//    outputFile.write(reinterpret_cast<char *>(&header.bitsperpixel), sizeof(header.bitsperpixel));
-//    outputFile.write(reinterpret_cast<char *>(&header.imagedescriptor), sizeof(header.imagedescriptor));
-//
-//    // Write the image data with all red pixels to the output file
-//    outputFile.write(reinterpret_cast<char *>(imageData.data()), imageData.size() * sizeof(Pixel24));
-//
-//    outputFile.close();
-
 
     return 0;
 }

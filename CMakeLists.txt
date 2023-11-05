@@ -12,4 +12,6 @@ add_executable(CppImageCompression main.cpp
         ImageData/ImageData.cpp
         ImageData/ImageData.hpp
         ImageData/Base/IImageData.hpp
-        ImageData/Base/AImageData.hpp)
+        ImageData/Base/AImageData.hpp
+        ImageBlurringAlgos/FastGaussianBlur.cpp
+        ImageBlurringAlgos/FastGaussianBlur.hpp)
