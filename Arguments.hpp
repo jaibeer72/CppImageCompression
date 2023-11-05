@@ -98,6 +98,7 @@ public:
         std::cout << "Supported Algorithms: " << std::endl;
         std::cout << "NaiveBlur // Default" << std::endl;
         std::cout << "FastGaussianBlur" << std::endl;
+        std::cout << "NaiveBlurThreaded" << std::endl;
     }
 
     void parseArgs(int argc, char *argv[])
@@ -157,7 +158,11 @@ public:
         } else if (str == "FastGaussianBlur")
         {
             algo = ESupportedImageBlurringAlgos::FAST_GAUSSIAN_BLUR;
-        } else
+        } else if(str == "NaiveBlurThreaded")
+        {
+            algo = ESupportedImageBlurringAlgos::NAIVE_BLUR_THREADED;
+        }
+        else
         {
             std::cerr << "Unknown Algorithm: " << str << std::endl;
         }

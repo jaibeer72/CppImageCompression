@@ -19,4 +19,6 @@ add_executable(CppImageCompression main.cpp
         ImageBlurringAlgos/Base/ImageBlurrer.hpp
         ImageBlurringAlgos/Base/ESupportedImageBlurringAlgos.hpp
         ImageBlurringAlgos/NaiveBlur.cpp
-        ImageBlurringAlgos/NaiveBlur.hpp)
+        ImageBlurringAlgos/NaiveBlur.hpp
+        ImageBlurringAlgos/NaiveBlurThreaded.cpp
+        ImageBlurringAlgos/NaiveBlurThreaded.hpp)

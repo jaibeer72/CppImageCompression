@@ -15,16 +15,16 @@ void NaiveBlur::PerformNaiveBlur(AImageData &imageData, float blurFactor)
     int height = imageData.GetHeight();
     int width = imageData.GetWidth();
 
-    // we need to keep the kernal size to odd numbers between 0 - 15 as from testing that works the best
-    int kernelSize = (int)MathUtils::lerp((float)KernalSizeMin, (float)KernelSizeMax, blurFactor);
+    int kernelSize = std::max(width , height) * (blurFactor / 10);
 
-    if(kernelSize % 2 == 0)
+    if(kernelSize% 2 == 0)
     {
         kernelSize++;
     }
 
     for (int y = 0; y < height; y++)
     {
+        std::cout<<"Interations compleated : "<<y<<" out of "<< height <<std::endl;
         for (int x = 0; x < width; x++)
         {
             int totalRed = 0, totalGreen = 0, totalBlue = 0;
