@@ -3,6 +3,25 @@
 - Also to use SOLID principles to make a good program.
 - The project uses NO EXTERNAL Libraries. to import. 
 
+## CPPImageCompression SDK
+
+The CPPImageCompression SDK provides a simple and easy-to-use interface for compressing images. The SDK currently supports two compression algorithms:
+
+* NaiveBlur
+* FastGaussianBlur
+
+To use the SDK, you first need to create a new `Args` object. The `Args` object stores the command line arguments that are used to configure the compression algorithm.
+
+```c++
+Args args(argc, argv);
+
+
+Once you have created an `Args` object, you can call the `getAlgo()` function to get the current compression algorithm.
+
+c++
+ESupportedImageBlurringAlgos algo = args.getAlgo();
+```
+
 
 ## TGA format Specifications 
 - https://www.fileformat.info/format/tga/egff.htm

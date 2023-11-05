@@ -8,7 +8,7 @@
 
 void FastGaussianBlur::PerformFastGaussianBlur(AImageData &imageData, float blurFactor)
 {
-    float sigma = MathUtils::lerp((float)sigmaMin, (float)simgaMax, blurFactor);
+    int sigma = MathUtils::lerp((float)sigmaMin, (float)simgaMax, blurFactor);
 
     std::vector<int> boxes = computeBoxes(sigma, numberOfBoxes);
     std::vector<Pixel32> pixelData = imageData.GetPixels();
@@ -16,6 +16,7 @@ void FastGaussianBlur::PerformFastGaussianBlur(AImageData &imageData, float blur
     boxBlur(pixelData, tempPixelData, imageData.GetWidth(), imageData.GetHeight(), (boxes[0] - 1) / 2);
     boxBlur(tempPixelData, pixelData, imageData.GetWidth(), imageData.GetHeight(), (boxes[1] - 1) / 2);
     boxBlur(pixelData, tempPixelData, imageData.GetWidth(), imageData.GetHeight(), (boxes[2] - 1) / 2);
+
     imageData.SetPixelData(tempPixelData);
 }
 
