@@ -3,9 +3,9 @@
 #include "ImageData/ImageData.hpp"
 #include <fstream>
 
-void NaiveBlur(std::vector<Pixel24> &image, int width, int height, int kernelSize)
+void NaiveBlur(std::vector<Pixel32> &image, int width, int height, int kernelSize)
 {
-    std::vector<Pixel24> originalImage = image; // Create a copy of the original image
+    std::vector<Pixel32> originalImage = image; // Create a copy of the original image
 
     for (int y = 0; y < height; y++)
     {
@@ -63,7 +63,14 @@ int main(int argc, char *argv[])
 
 
     auto tgaImage = ImageData::Create(appArgs->getSource());
-    std::cout<<"randome pixels color" << tgaImage->GetPixels()[0].r;
+    std::cout<<"\n randome pixels color" << tgaImage->GetPixels()[0].r;
+
+    auto pixelData = tgaImage->GetPixels();
+    NaiveBlur(pixelData, tgaImage->GetWidth(), tgaImage->GetHeight(), 9);
+    tgaImage->SetPixelData(pixelData);
+    tgaImage->WritePixelDataToFile(appArgs->getDestination());
+
+
 
 //    std::ifstream file(appArgs->getSource().c_str(), std::ios::binary | std::ios_base::in);
 //    if (!file.is_open())

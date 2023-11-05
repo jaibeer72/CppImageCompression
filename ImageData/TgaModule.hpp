@@ -29,6 +29,7 @@ namespace TGA
         char bitsperpixel;
         char imagedescriptor;
     };
+
     class TGAImageData : public AImageData
     {
         // variables
@@ -45,12 +46,22 @@ namespace TGA
 
         bool ReadPixel24into32(std::ifstream &file, std::vector<Pixel32> &imageData);
 
-        bool ReadPixel32(std::ifstream &file , std::vector<Pixel32> &imageData);
+        bool ReadPixel32(std::ifstream &file, std::vector<Pixel32> &imageData);
+
+        // Writer functions
+        template<typename T>
+        bool WriteHeaderField(std::ofstream &file, T &field, const char *fieldName);
+
+        bool WriteHeader(std::ofstream &file);
+
+        bool WritePixel32into24File(std::ofstream &file, const std::vector<Pixel32> &imageData);
+
+        bool WritePixel32(std::ofstream &file, const std::vector<Pixel32> &imageData);
 
     public:
         static std::unique_ptr<TGAImageData> CreateTGAImage(const std::string &filePath);
 
-        static void WriteImage(const std::string &filePath, std::unique_ptr<TGAImageData> imgData);
+        void WritePixelDataToFile(const std::string &filePath) override;
     };
 }
 

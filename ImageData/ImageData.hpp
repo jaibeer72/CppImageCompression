@@ -6,14 +6,15 @@
 #define CPPIMAGECOMPRESSION_IMAGEDATA_HPP
 
 #include <memory>
-#include "Base/AImageData.hpp"
 
-class ImageData : public AImageData
+// Forward declaration to tell the compiler we good
+class AImageData;
+
+class ImageData
 {
 public:
     // Factory method to create ImageData instances based on file format
     static std::unique_ptr <AImageData> Create(const std::string &filePath);
-    static void WriteImage(const std::string &filePath, std::unique_ptr <AImageData> imgData);
 };
 
 

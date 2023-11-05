@@ -66,6 +66,12 @@ public:
         pixelData = Pixeldata;
     }
 
+    void WritePixelDataToFile(const std::string &filePath) override
+    {
+        // something to just make sure people are implementing this.
+        throw std::logic_error("WritePixelDataToFile is not implemented in the derived class.");
+    }
+
 };
 
 #endif //CPPIMAGECOMPRESSION_AIMAGEDATA_HPP

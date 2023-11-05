@@ -29,7 +29,7 @@ public:
 
     virtual void SetPixelData(std::vector<Pixel32> pixelData)  = 0;
 
-    virtual
+    virtual void WritePixelDataToFile(const std::string &filePath) = 0;
 
     virtual const std::vector<Pixel32> GetPixels() const = 0;
 
