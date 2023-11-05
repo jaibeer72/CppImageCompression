@@ -16,7 +16,7 @@ void NaiveBlur::PerformNaiveBlur(AImageData &imageData, float blurFactor)
     int width = imageData.GetWidth();
 
     // we need to keep the kernal size to odd numbers between 0 - 15 as from testing that works the best
-    int kernelSize = std::round(MathUtils::lerp((float)KernalSizeMin, (float)KernelSizeMax, blurFactor));
+    int kernelSize = (int)MathUtils::lerp((float)KernalSizeMin, (float)KernelSizeMax, blurFactor);
 
     if(kernelSize % 2 == 0)
     {

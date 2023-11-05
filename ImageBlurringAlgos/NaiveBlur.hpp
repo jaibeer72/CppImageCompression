@@ -11,7 +11,7 @@ class NaiveBlur
 {
 private:
     static const int KernalSizeMin = 0;
-    static const int KernelSizeMax = 100;
+    static const int KernelSizeMax = 15;
 
 public:
     static void PerformNaiveBlur(AImageData &imageData, float sigma);
