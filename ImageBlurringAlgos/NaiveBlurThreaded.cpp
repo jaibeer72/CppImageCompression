@@ -4,7 +4,6 @@
 
 #include "NaiveBlurThreaded.hpp"
 #include "../ImageData/Base/AImageData.hpp"
-#include "../Utils/MathUtils.hpp"
 #include <thread>
 
 void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float blurFactor)
@@ -16,12 +15,12 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float b
 
     int kernelSize = (int)(std::max(width, height) * (blurFactor / 10)) / 4;
 
-    std::cout<<"Kernel Size : "<<kernelSize<<std::endl;
-
     if (kernelSize % 2 == 0)
     {
         kernelSize++;
     }
+
+    std::cout<<"Kernel Size: "<<kernelSize<<std::endl;
 
     std::mutex mtx;
 
@@ -30,7 +29,7 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float b
         for (int y = startY; y < endY; y++)
         {
             std::cout << "Interations completed: " << y << " out of " << endY << " on thread " << std::this_thread::get_id() << std::endl;
-            float percentile = (float)(y / endY) * 100.0f;
+            float percentile = static_cast<float>(y - startY) / static_cast<float>(endY - startY) * 100.0f;
             std::cout << "Percentile completed: " << percentile << "%" << std::endl;
             for (int x = 0; x < width; x++)
             {
@@ -65,12 +64,10 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float b
 
                         if (newX >= 0 && newX < width && newY >= 0 && newY < height)
                         {
-                            mtx.lock();
                             totalRed += originalImage[newY * width + newX].r;
                             totalGreen += originalImage[newY * width + newX].g;
                             totalBlue += originalImage[newY * width + newX].b;
                             pixelCount++;
-                            mtx.unlock();
                         }
                     }
                 }

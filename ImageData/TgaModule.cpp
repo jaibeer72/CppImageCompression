@@ -55,36 +55,13 @@ bool TGA::TGAImageData::ReadPixel24into32(std::ifstream &file, std::vector<Pixel
 {
     imageData.resize(header.width * header.height);
 
-    const int numThreads = std::thread::hardware_concurrency();
-    const int rowsPerThread = header.height / numThreads;
-
-    auto threadFunc = [&](int startRow, int endRow)
+    for (size_t i = 0; i < imageData.size(); ++i)
     {
-        for (int y = startRow; y < endRow; ++y)
-        {
-            for (int x = 0; x < header.width; ++x)
-            {
-                Pixel32 pixel;
-                file.read(reinterpret_cast<char *>(&pixel.r), sizeof(pixel.r));
-                file.read(reinterpret_cast<char *>(&pixel.g), sizeof(pixel.g));
-                file.read(reinterpret_cast<char *>(&pixel.b), sizeof(pixel.b));
-                pixel.a = 0;
-                imageData[y * header.width + x] = pixel;
-            }
-        }
-    };
-
-    std::vector<std::thread> threads;
-    for (int i = 0; i < numThreads; ++i)
-    {
-        int startRow = i * rowsPerThread;
-        int endRow = (i == numThreads - 1) ? header.height : (startRow + rowsPerThread);
-        threads.emplace_back(threadFunc, startRow, endRow);
-    }
-
-    for (auto &thread : threads)
-    {
-        thread.join();
+        file.read(reinterpret_cast<char *>(&imageData[i].r), sizeof(imageData[i].r));
+        file.read(reinterpret_cast<char *>(&imageData[i].g), sizeof(imageData[i].g));
+        file.read(reinterpret_cast<char *>(&imageData[i].b), sizeof(imageData[i].b));
+        // Set alpha to 0
+        imageData[i].a = 0;
     }
 
     if (!file.good())
