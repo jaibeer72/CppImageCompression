@@ -24,9 +24,9 @@ void NaiveBlur::PerformNaiveBlur(AImageData &imageData, float blurFactor)
 
     for (int y = 0; y < height; y++)
     {
-        std::cout<<"Interations compleated : "<<y<<" out of "<< height <<std::endl;
-        float percentile = static_cast<float>( height - y) / static_cast<float>(height ) * 100.0f;
-        std::cout << "Percentile completed: " << percentile << "%" << std::endl;
+        //std::cout<<"Interations compleated : "<<y<<" out of "<< height <<std::endl;
+        //float percentile = static_cast<float>(y) / static_cast<float>(height ) * 100.0f;
+        //std::cout << "Percentile completed: " << percentile << "%" << std::endl;
         for (int x = 0; x < width; x++)
         {
             int totalRed = 0, totalGreen = 0, totalBlue = 0;

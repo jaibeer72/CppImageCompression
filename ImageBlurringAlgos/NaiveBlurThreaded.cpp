@@ -28,9 +28,9 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float b
     {
         for (int y = startY; y < endY; y++)
         {
-            std::cout << "Interations completed: " << y << " out of " << endY << " on thread " << std::this_thread::get_id() << std::endl;
-            float percentile = static_cast<float>(y - startY) / static_cast<float>(endY - startY) * 100.0f;
-            std::cout << "Percentile completed: " << percentile << "%" << std::endl;
+            //  std::cout << "Interations completed: " << y << " out of " << endY << " on thread " << std::this_thread::get_id() << std::endl;
+             // float percentile = static_cast<float>(y - startY) / static_cast<float>(endY - startY) * 100.0f;
+            // std::cout << "Percentile completed: " << percentile << "% on thread" << std::this_thread::get_id() << std::endl;
             for (int x = 0; x < width; x++)
             {
                 int totalRed = 0, totalGreen = 0, totalBlue = 0;
@@ -72,11 +72,11 @@ void NaiveBlurThreaded::PerformNaiveBlur_Threaded(AImageData &imageData, float b
                     }
                 }
 
-                mtx.lock();
+                //mtx.lock();
                 image[y * width + x].r = totalRed / pixelCount;
                 image[y * width + x].g = totalGreen / pixelCount;
                 image[y * width + x].b = totalBlue / pixelCount;
-                mtx.unlock();
+                //mtx.unlock();
             }
         }
     };
