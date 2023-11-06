@@ -3,9 +3,12 @@
 - Also to use SOLID principles to make a good program.
 - The project uses NO EXTERNAL Libraries. to import. 
 
-## CPPImageCompression SDK
+## CPPImageCompression SDK 
 
-The CPPImageCompression SDK provides a simple and easy-to-use interface for compressing images. The SDK currently supports two compression algorithms:
+this is unfortunate naming. I read the mandate assumed that was what blurring did as images when convoluted in keras is to compress as much infomration
+as possible. to the next layer of the network as thats how i understood it.
+
+The CPPImageBluring SDK provides a simple and easy-to-use interface for compressing images. The SDK currently supports blurring algorithms:
 
 * NaiveBlur
   * simple averagined 
