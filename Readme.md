@@ -11,6 +11,9 @@ The CPPImageCompression SDK provides a simple and easy-to-use interface for comp
   * simple averagined 
 * NaiveBlurThreaded
   * just threaded it for it to perform a little faster
+* NaiveBlur Prefix Sum based Matrix
+  * this is a little more complex but it is faster than the other two.
+  * This is a late addition casue i was watching some yourtube video on Prefix sum and it hit me
 * FastGaussianBlur
   * Currenly not performing as nessary was based on a java implimentation that was not working as expected.
   * will be fixed in the future.

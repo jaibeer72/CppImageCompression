@@ -4,7 +4,6 @@
 
 #include "NaiveBlur.hpp"
 #include "../ImageData/Base/AImageData.hpp"
-#include "../Utils/MathUtils.hpp"
 
 #include <math.h>
 

@@ -22,4 +22,6 @@ add_executable(CppImageCompression main.cpp
         ImageBlurringAlgos/NaiveBlur.hpp
         ImageBlurringAlgos/NaiveBlurThreaded.cpp
         ImageBlurringAlgos/NaiveBlurThreaded.hpp
+        ImageBlurringAlgos/NaiveBlurPrefixSumMat.cpp
+        ImageBlurringAlgos/NaiveBlurPrefixSumMat.hpp
 )

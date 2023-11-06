@@ -3,6 +3,7 @@
 #include "ImageData/ImageData.hpp"
 #include "ImageBlurringAlgos/Base/ImageBlurrer.hpp"
 
+
 #include <chrono>
 
 int main(int argc, char *argv[])
@@ -34,6 +35,9 @@ int main(int argc, char *argv[])
     tgaImage->WritePixelDataToFile(appArgs->getDestination());
     end = std::chrono::high_resolution_clock::now();
     std::cout << "Time taken to write the image to file: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
+
+    // got to free the memory i guess. :P
+    free(appArgs);
 
     return 0;
 }

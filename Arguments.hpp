@@ -99,6 +99,7 @@ public:
         std::cout << "NaiveBlur // Default" << std::endl;
         std::cout << "FastGaussianBlur" << std::endl;
         std::cout << "NaiveBlurThreaded" << std::endl;
+        std::cout << "NaiveBlurPrefixSumMat" << std::endl;
     }
 
     void parseArgs(int argc, char *argv[])
@@ -161,6 +162,10 @@ public:
         } else if(str == "NaiveBlurThreaded")
         {
             algo = ESupportedImageBlurringAlgos::NAIVE_BLUR_THREADED;
+        }
+        else if(str == "NaiveBlurPrefixSumMat")
+        {
+            algo = ESupportedImageBlurringAlgos::NAIVE_BLUR_PREFIX_SUM_MAT;
         }
         else
         {
