@@ -1,11 +1,13 @@
 //
 // Created by Jaibeer Dugal on 06/11/2023.
 //
+// https://www.youtube.com/watch?v=WibxoqMSMCw
 
 #include "NaiveBlurPrefixSumMat.hpp"
 #include "../ImageData/Base/AImageData.hpp"
 
 
+//review
 void NaiveBlur_PrefixSumMat::PerformNaive_PrefixSumBlur(AImageData &imageData, float blurFactor)
 {
     std::vector<Pixel32> image = imageData.GetPixels();
@@ -69,7 +71,7 @@ void NaiveBlur_PrefixSumMat::PerformNaive_PrefixSumBlur(AImageData &imageData, f
             int pixelCount = 0;
 
             // Calculate the coordinates of the kernel corners
-            // for now we will loose the corners 
+            // for now we will loose the corners
             int x1 = std::max(0, x - kernelSize);
             int y1 = std::max(0, y - kernelSize);
             int x2 = std::min(width - 1, x + kernelSize);
